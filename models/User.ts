@@ -1,13 +1,25 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  username: {
+  clerkId: { type: String },
+
+  firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
+  userName: {
+    type: String,
+  },
+  email: {
     type: String,
     required: true,
   },
   password: {
     type: String,
-    required: true,
   },
   roles: {
     type: [String],
@@ -17,8 +29,8 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-  image: {
-    // Todo
+  photo: {
+    type: String,
   },
 });
 
