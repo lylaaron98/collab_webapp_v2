@@ -37,7 +37,6 @@ const Narbar = () => {
       </Link>
       {/* <GlobalSearch /> */}
       <NavLinks />
-
       <div className="flex-between gap-5">
         <Theme />
         <SignedIn>

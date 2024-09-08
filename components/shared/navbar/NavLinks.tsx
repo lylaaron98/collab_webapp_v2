@@ -9,9 +9,7 @@ const NavLinks = () => {
   return (
     <div className="flex gap-4">
       {navBarLinks?.map((item) => {
-        const isActive =
-          (pathname.includes(item.route) && item.route.length > 1) ||
-          pathname === item.route;
+        const isActive = pathname === item.route;
 
         return (
           <Link

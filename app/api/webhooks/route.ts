@@ -70,6 +70,8 @@ export async function POST(req: Request) {
       photo: image_url,
     };
 
+    // console.log("user", user);
+
     const newUser = await createUser(user);
 
     if (newUser) {
