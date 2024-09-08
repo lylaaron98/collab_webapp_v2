@@ -5,6 +5,7 @@ import dbConnect from "../db";
 import { revalidatePath } from "next/cache";
 
 export interface Task {
+  _id?: string;
   title: string;
   text: string;
   user: {
@@ -58,11 +59,11 @@ export async function getTasks() {
 
 export async function getTaskById(id: string) {
   try {
-    await dbConnect();
+    await dbConnect(); // Connect to the database
     const task = await Task.findById(id)
       .populate("user", "firstName clerkId")
-      .lean(); // Populate the user field
-    return task;
+      .lean(); // Fetch the task by ID
+    return task; // This should return a single task or null
   } catch (error) {
     console.error("Failed to fetch task", error);
     return null; // Return null on error

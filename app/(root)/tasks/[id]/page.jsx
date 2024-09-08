@@ -1,20 +1,21 @@
 "use client";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getTaskById, Task, updateTaskById } from "@/lib/actions/task"; // Create this function to fetch a single task
+import { getTaskById, updateTaskById } from "@/lib/actions/task"; // Create this function to fetch a single task
 import { useUser } from "@clerk/nextjs"; // Import Clerk's useUser hook
+import { FlattenMaps } from "mongoose";
 
 const TaskDetails = () => {
   const router = useRouter();
   const { id } = useParams(); // Get the task ID from the URL
-  const [task, setTask] = useState<Task | null>(null);
+  const [task, setTask] = useState(null);
   const { user } = useUser(); // Get the logged-in user
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTask = async () => {
       if (id) {
-        const fetchedTask = await getTaskById(id as string); // Fetch the task by ID
+        const fetchedTask = await getTaskById(id); // Fetch the task by ID
         setTask(fetchedTask);
         setLoading(false);
       }
@@ -28,7 +29,7 @@ const TaskDetails = () => {
     // You can call an API endpoint to update the task in the database
     // Example: await updateTaskStatus(id, { completed: true });
 
-    await updateTaskById(id as string, { completed: true });
+    await updateTaskById(id, { completed: true });
     console.log("Task marked as done");
   };
 
