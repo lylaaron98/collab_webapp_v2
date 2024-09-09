@@ -13,8 +13,18 @@ const Users = async () => {
         <div className="text-center text-gray-500">No users found.</div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {users.map((user) => (
-            <UserCard key={user._id} user={user} />
+          {users.map((user, index) => (
+            <UserCard
+              key={index}
+              user={{
+                _id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                active: user.active,
+                clerkId: user.clerkId,
+              }}
+            />
           ))}
         </div>
       )}

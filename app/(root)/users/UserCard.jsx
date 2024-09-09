@@ -1,11 +1,15 @@
 "use client";
 import { getUserTasks } from "@/lib/actions/task";
-import { User, Mail, CheckCircle, XCircle } from "lucide-react"; // Import additional icons
+import { User, Mail, CheckCircle, XCircle, MessageCircle } from "lucide-react"; // Import additional icons
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
+import { createChat, getChatByUserIds } from "@/lib/actions/chat";
+import { getUserByClerkId } from "@/lib/actions/user.action";
 
-const UserCard = ({ user }: { user: any }) => {
+const UserCard = ({ user }) => {
   const router = useRouter();
+  const { user: loggedUser } = useUser();
 
   const [completedTasks, setCompletedTasks] = useState(0);
   const [assignedTasks, setAssignedTasks] = useState(0);
@@ -51,7 +55,7 @@ const UserCard = ({ user }: { user: any }) => {
           </span>
         </span>
       </div>
-      <div className="flex items-center ">
+      <div className="flex items-center gap-4">
         <span
           className={`px-2 py-1 rounded-full text-sm ${
             user.active
@@ -61,6 +65,35 @@ const UserCard = ({ user }: { user: any }) => {
         >
           {user.active ? "Active" : "Inactive"}
         </span>
+
+        {/* message */}
+        {loggedUser?.id !== user?.clerkId && (
+          <div
+            className="flex border cursor-pointer p-2 rounded  hover:bg-light-800 hover:transition-colors"
+            onClick={async () => {
+              let loggedUser_ = await getUserByClerkId(loggedUser?.id);
+              let chat = await getChatByUserIds([user._id, loggedUser_?._id]);
+
+              if (chat) {
+                router.push(`/chat/${chat?._id}`);
+              } else {
+                const { error, newChatId } = await createChat([
+                  user._id,
+                  loggedUser_?._id,
+                ]);
+
+                if (error) {
+                  alert(error.message);
+                } else {
+                  router.push(`/chat/${newChatId}`);
+                }
+              }
+            }}
+          >
+            <MessageCircle className="text-green-500 mr-1" />
+            <span className="text-gray-500 mr-1">Message</span>
+          </div>
+        )}
       </div>
     </div>
   );
